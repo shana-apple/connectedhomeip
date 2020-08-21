@@ -54,16 +54,6 @@ bool emberAfBarrierControlClusterBarrierControlGoToPercentCallback(uint8_t perce
     return false;
 }
 
-/** @brief Basic Cluster Reset To Factory Defaults
- *
- *
- *
- */
-bool emberAfBasicClusterResetToFactoryDefaultsCallback(void)
-{
-    return false;
-}
-
 /** @brief Color Control Cluster Move Color
  *
  *
