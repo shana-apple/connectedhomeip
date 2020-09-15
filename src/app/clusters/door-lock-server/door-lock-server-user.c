@@ -171,7 +171,6 @@ static uint8_t setUser(uint16_t userId, uint8_t userStatus, uint8_t userType, ui
         user->type                             = userType;
         memmove(user->code.rfid, code,
                 emberAfStringLength(code) + 1); // + 1 for Zigbee string length byte
-                                                /*MEMMOVE #2500*/
 
         emberAfDoorLockClusterPrintln("***RX SET %s ***", (userTable == pinUserTable ? "PIN" : "RFID"));
         printUserTables();
@@ -203,7 +202,7 @@ static uint8_t clearUserPinOrRfid(uint16_t userId, EmberAfPluginDoorLockServerUs
         // Since the rfid member of the struct is a Zigbee string, setting the first
         // byte to 0 will indicate that we have a 0-length pin.
         memset((userTable == pinUserTable ? userTable[userId].code.pin : userTable[userId].code.rfid), 0x00,
-               sizeof(userTable[userId].code)); /*MEMSET #2501*/
+               sizeof(userTable[userId].code));
         success = true;
     }
     return (success ? 0x00 : 0x01); // See 7.3.2.17.8 and 7.3.2.17.25).
@@ -477,8 +476,7 @@ static bool verifyPin(uint8_t * pin, uint8_t * userId)
     {
         EmberAfPluginDoorLockServerUser * user = &pinUserTable[i];
         uint8_t userPinLength                  = emberAfStringLength(user->code.pin);
-        if (userPinLength == emberAfStringLength(pin) &&
-            0 == memcmp(&user->code.pin[1], &pin[1], userPinLength)) /*MEMCOMPARE #2502 */
+        if (userPinLength == emberAfStringLength(pin) && 0 == memcmp(&user->code.pin[1], &pin[1], userPinLength))
         {
             *userId = i;
             return true;
@@ -612,9 +610,7 @@ static void startLockout()
     uint8_t lockoutTimeS = getUserCodeTemporaryDisableTime();
     if (lockoutTimeS != 0)
     {
-        /*emberEventControlSetDelayMS(emberAfPluginDoorLockServerLockoutEventControl, lockoutTimeS * MILLISECOND_TICKS_PER_SECOND);
-         * Replace silab emberEventControlSet (DelayMS/Inactive...) methods with equivalent #2503
-         */
+        emberEventControlSetDelayMS(emberAfPluginDoorLockServerLockoutEventControl, lockoutTimeS * MILLISECOND_TICKS_PER_SECOND);
     }
 }
 
@@ -625,8 +621,7 @@ static EmberAfStatus applyCode(uint8_t * code, uint8_t codeLength, EmberAfPlugin
     for (uint8_t i = 0; i < userTableLength; i++)
     {
         uint8_t * userCode = (userTable == pinUserTable ? userTable[i].code.pin : userTable[i].code.rfid);
-        if (code == NULL ||
-            (emberAfStringLength(userCode) == codeLength && memcmp(code, userCode + 1, codeLength) == 0)) /* MEMCOMPARE #2502*/
+        if (code == NULL || (emberAfStringLength(userCode) == codeLength && memcmp(code, userCode + 1, codeLength) == 0))
         {
             EmberAfDoorLockState state = EMBER_ZCL_DOOR_LOCK_STATE_UNLOCKED;
             return emberAfWriteServerAttribute(DOOR_LOCK_SERVER_ENDPOINT, ZCL_DOOR_LOCK_CLUSTER_ID, ZCL_LOCK_STATE_ATTRIBUTE_ID,
@@ -688,10 +683,8 @@ static void scheduleAutoRelock(uint32_t autoRelockTimeS)
     }
     else
     {
-        /* emberEventControlSetDelayMS(emberAfPluginDoorLockServerRelockEventControl,
+        emberEventControlSetDelayMS(emberAfPluginDoorLockServerRelockEventControl,
                                     (autoRelockTimeS * MILLISECOND_TICKS_PER_SECOND));
-        * Replace silab emberEventControlSet (DelayMS/Inactive...) methods with equivalent #2503
-        */
     }
 }
 
