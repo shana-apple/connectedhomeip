@@ -1,5 +1,5 @@
 {
-  "featureLevel": 25,
+  "featureLevel": 26,
   "creator": "zap",
   "keyValuePairs": [
     {
@@ -3982,7 +3982,7 @@
             },
             {
               "name": "GetFabricId",
-              "code": 3,
+              "code": 2,
               "mfgCode": null,
               "source": "client",
               "incoming": 1,
@@ -4016,8 +4016,8 @@
           "enabled": 0,
           "commands": [
             {
-              "name": "GetFabridIdResponse",
-              "code": 0,
+              "name": "GetFabricIdResponse",
+              "code": 3,
               "mfgCode": null,
               "source": "server",
               "incoming": 1,

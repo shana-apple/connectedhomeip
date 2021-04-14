@@ -37,11 +37,11 @@ limitations under the License.
       <arg name="vendorId" type="INT16U"/>
     </command>
 
-    <command source="client" code="0x03" name="GetFabricId" optional="false">
+    <command source="client" code="0x02" name="GetFabricId" optional="false">
       <description>Sets the fabric ID of that admin's fabric. Should be called post pairing and can only be called once</description>
     </command>
 
-    <command source="server" code="0x00" name="GetFabridIdResponse" optional="false">
+    <command source="server" code="0x03" name="GetFabricIdResponse" optional="false">
       <description>Sender expects GetFabricIdResponse command if the GetFabricId command was correctly received</description>
       <arg name="fabricId" type="FABRIC_ID"/>
     </command>
