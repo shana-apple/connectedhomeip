@@ -255,6 +255,18 @@ class ChipClusters:
                     "pin": "bytes",
                 },
             },
+            "Fabric": {
+                "GetFabricId": {
+                },
+                "RemoveFabric": {
+                    "fabricId": "int",
+                    "nodeId": "int",
+                    "vendorId": "int",
+                },
+                "UpdateLabel": {
+                    "label": "bytes",
+                },
+            },
             "GeneralCommissioning": {
                 "ArmFailSafe": {
                     "expiryLengthSeconds": "int",
@@ -558,6 +570,9 @@ class ChipClusters:
                 "ActuatorEnabled",
                 "ClusterRevision",
             ],
+            "Fabric": [
+                "ClusterRevision",
+            ],
             "GeneralCommissioning": [
                 "FabricId",
                 "Breadcrumb",
@@ -812,6 +827,18 @@ class ChipClusters:
         pin = pin.encode("utf-8") + b'\x00'
         return self._chipLib.chip_ime_AppendCommand_DoorLock_UnlockWithTimeout(
                 device, ZCLendpoint, ZCLgroupid, timeoutInSeconds, pin, len(pin)
+        )
+    def ClusterFabric_CommandGetFabricId(self, device: ctypes.c_void_p, ZCLendpoint: int, ZCLgroupid: int):
+        return self._chipLib.chip_ime_AppendCommand_Fabric_GetFabricId(
+                device, ZCLendpoint, ZCLgroupid
+        )
+    def ClusterFabric_CommandRemoveFabric(self, device: ctypes.c_void_p, ZCLendpoint: int, ZCLgroupid: int, fabricId: int, nodeId: int, vendorId: int):
+        return self._chipLib.chip_ime_AppendCommand_Fabric_RemoveFabric(
+                device, ZCLendpoint, ZCLgroupid, fabricId, nodeId, vendorId
+        )
+    def ClusterFabric_CommandUpdateLabel(self, device: ctypes.c_void_p, ZCLendpoint: int, ZCLgroupid: int, label: bytes):
+        return self._chipLib.chip_ime_AppendCommand_Fabric_UpdateLabel(
+                device, ZCLendpoint, ZCLgroupid, label, len(label)
         )
     def ClusterGeneralCommissioning_CommandArmFailSafe(self, device: ctypes.c_void_p, ZCLendpoint: int, ZCLgroupid: int, expiryLengthSeconds: int, breadcrumb: int, timeoutMs: int):
         return self._chipLib.chip_ime_AppendCommand_GeneralCommissioning_ArmFailSafe(
@@ -1167,6 +1194,8 @@ class ChipClusters:
         return self._chipLib.chip_ime_ReadAttribute_DoorLock_ActuatorEnabled(device, ZCLendpoint, ZCLgroupid)
     def ClusterDoorLock_ReadAttributeClusterRevision(self, device: ctypes.c_void_p, ZCLendpoint: int, ZCLgroupid: int):
         return self._chipLib.chip_ime_ReadAttribute_DoorLock_ClusterRevision(device, ZCLendpoint, ZCLgroupid)
+    def ClusterFabric_ReadAttributeClusterRevision(self, device: ctypes.c_void_p, ZCLendpoint: int, ZCLgroupid: int):
+        return self._chipLib.chip_ime_ReadAttribute_Fabric_ClusterRevision(device, ZCLendpoint, ZCLgroupid)
     def ClusterGeneralCommissioning_ReadAttributeFabricId(self, device: ctypes.c_void_p, ZCLendpoint: int, ZCLgroupid: int):
         return self._chipLib.chip_ime_ReadAttribute_GeneralCommissioning_FabricId(device, ZCLendpoint, ZCLgroupid)
     def ClusterGeneralCommissioning_ReadAttributeBreadcrumb(self, device: ctypes.c_void_p, ZCLendpoint: int, ZCLgroupid: int):
@@ -1636,6 +1665,19 @@ class ChipClusters:
         # Cluster DoorLock ReadAttribute ClusterRevision
         self._chipLib.chip_ime_ReadAttribute_DoorLock_ClusterRevision.argtypes = [ctypes.c_void_p, ctypes.c_uint8, ctypes.c_uint16]
         self._chipLib.chip_ime_ReadAttribute_DoorLock_ClusterRevision.restype = ctypes.c_uint32
+        # Cluster Fabric
+        # Cluster Fabric Command GetFabricId
+        self._chipLib.chip_ime_AppendCommand_Fabric_GetFabricId.argtypes = [ctypes.c_void_p, ctypes.c_uint8, ctypes.c_uint16]
+        self._chipLib.chip_ime_AppendCommand_Fabric_GetFabricId.restype = ctypes.c_uint32
+        # Cluster Fabric Command RemoveFabric
+        self._chipLib.chip_ime_AppendCommand_Fabric_RemoveFabric.argtypes = [ctypes.c_void_p, ctypes.c_uint8, ctypes.c_uint16, ctypes.c_uint64, ctypes.c_uint64, ctypes.c_uint16]
+        self._chipLib.chip_ime_AppendCommand_Fabric_RemoveFabric.restype = ctypes.c_uint32
+        # Cluster Fabric Command UpdateLabel
+        self._chipLib.chip_ime_AppendCommand_Fabric_UpdateLabel.argtypes = [ctypes.c_void_p, ctypes.c_uint8, ctypes.c_uint16, ctypes.c_char_p, ctypes.c_uint32]
+        self._chipLib.chip_ime_AppendCommand_Fabric_UpdateLabel.restype = ctypes.c_uint32
+        # Cluster Fabric ReadAttribute ClusterRevision
+        self._chipLib.chip_ime_ReadAttribute_Fabric_ClusterRevision.argtypes = [ctypes.c_void_p, ctypes.c_uint8, ctypes.c_uint16]
+        self._chipLib.chip_ime_ReadAttribute_Fabric_ClusterRevision.restype = ctypes.c_uint32
         # Cluster GeneralCommissioning
         # Cluster GeneralCommissioning Command ArmFailSafe
         self._chipLib.chip_ime_AppendCommand_GeneralCommissioning_ArmFailSafe.argtypes = [ctypes.c_void_p, ctypes.c_uint8, ctypes.c_uint16, ctypes.c_uint16, ctypes.c_uint64, ctypes.c_uint32]
