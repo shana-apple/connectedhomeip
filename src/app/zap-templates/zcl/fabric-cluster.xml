@@ -25,9 +25,9 @@ limitations under the License.
 
     <attribute side="server" code="0x0000" define="FABRICS_LIST" type="ARRAY" entryType="FabricDescriptor" length="254" writable="false" optional="false">fabrics list</attribute>
 
-    <command source="client" code="0x00" name="UpdateLabel" optional="false">
+    <command source="client" code="0x00" name="UpdateFabricLabel" optional="false">
       <description>Update Label on fabric</description>
-      <arg name="label" type="OCTET_STRING" length="32"/>
+      <arg name="fabricLabel" type="OCTET_STRING" length="32"/>
     </command>
 
     <command source="client" code="0x01" name="RemoveFabric" optional="false">

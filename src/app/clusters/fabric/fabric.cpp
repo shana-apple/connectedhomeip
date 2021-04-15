@@ -66,7 +66,7 @@ bool emberAfFabricClusterGetFabricIdCallback()
     return true;
 }
 
-bool emberAfFabricClusterUpdateLabelCallback(chip::ByteSpan label)
+bool emberAfFabricClusterUpdateFabricLabelCallback(chip::ByteSpan label)
 {
     EmberAfStatus status = EMBER_ZCL_STATUS_FAILURE;
     emberAfSendImmediateDefaultResponse(status);
