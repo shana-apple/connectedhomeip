@@ -2438,14 +2438,14 @@ CHIP_ERROR FabricCluster::RemoveFabric(Callback::Cancelable * onSuccessCallback,
 #endif
 }
 
-CHIP_ERROR FabricCluster::UpdateLabel(Callback::Cancelable * onSuccessCallback, Callback::Cancelable * onFailureCallback, chip::ByteSpan label)
+CHIP_ERROR FabricCluster::UpdateFabricLabel(Callback::Cancelable * onSuccessCallback, Callback::Cancelable * onFailureCallback, chip::ByteSpan fabricLabel)
 {
 #if CHIP_ENABLE_INTERACTION_MODEL
     VerifyOrReturnError(mDevice != nullptr, CHIP_ERROR_INCORRECT_STATE);
     (void) onSuccessCallback;
 (void) onFailureCallback;
 
-    app::Command::CommandParams cmdParams = { mEndpoint, /* group id */ 0, mClusterId, kUpdateLabelCommandId,
+    app::Command::CommandParams cmdParams = { mEndpoint, /* group id */ 0, mClusterId, kUpdateFabricLabelCommandId,
                                          (chip::app::Command::CommandPathFlags::kEndpointIdValid) };
     app::Command * ZCLcommand = mDevice->GetCommandSender();
 
@@ -2455,8 +2455,8 @@ CHIP_ERROR FabricCluster::UpdateLabel(Callback::Cancelable * onSuccessCallback, 
     ReturnErrorOnFailure(writer.StartContainer(TLV::AnonymousTag, TLV::kTLVType_Structure, dummyType));
 
     uint8_t argSeqNumber = 0;
-    // label: octetString
-    ReturnErrorOnFailure(writer.Put(TLV::ContextTag(argSeqNumber++), label));
+    // fabricLabel: octetString
+    ReturnErrorOnFailure(writer.Put(TLV::ContextTag(argSeqNumber++), fabricLabel));
 
     ReturnErrorOnFailure(writer.EndContainer(dummyType));
     ReturnErrorOnFailure(writer.Finalize());
@@ -2465,7 +2465,7 @@ CHIP_ERROR FabricCluster::UpdateLabel(Callback::Cancelable * onSuccessCallback, 
     return mDevice->SendCommands();
 #else
     uint8_t seqNum = mDevice->GetNextSequenceNumber();
-    System::PacketBufferHandle encodedCommand = encodeFabricClusterUpdateLabelCommand(seqNum, mEndpoint, label);
+    System::PacketBufferHandle encodedCommand = encodeFabricClusterUpdateFabricLabelCommand(seqNum, mEndpoint, fabricLabel);
     return SendCommand(seqNum, std::move(encodedCommand), onSuccessCallback, onFailureCallback);
 #endif
 }

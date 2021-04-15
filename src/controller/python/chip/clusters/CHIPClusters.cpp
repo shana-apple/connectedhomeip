@@ -1129,12 +1129,12 @@ CHIP_ERROR chip_ime_AppendCommand_Fabric_RemoveFabric(chip::Controller::Device *
     , vendorId
     );
 }
-CHIP_ERROR chip_ime_AppendCommand_Fabric_UpdateLabel(chip::Controller::Device * device, chip::EndpointId ZCLendpointId, chip::GroupId, const uint8_t * label, uint32_t label_Len)
+CHIP_ERROR chip_ime_AppendCommand_Fabric_UpdateFabricLabel(chip::Controller::Device * device, chip::EndpointId ZCLendpointId, chip::GroupId, const uint8_t * fabricLabel, uint32_t fabricLabel_Len)
 {
     VerifyOrReturnError(device != nullptr, CHIP_ERROR_INVALID_ARGUMENT);
     chip::Controller::FabricCluster cluster;
     cluster.Associate(device, ZCLendpointId);
-    return cluster.UpdateLabel(gDefaultSuccessCallback.Cancel(), gDefaultFailureCallback.Cancel(), chip::ByteSpan(label, label_Len)
+    return cluster.UpdateFabricLabel(gDefaultSuccessCallback.Cancel(), gDefaultFailureCallback.Cancel(), chip::ByteSpan(fabricLabel, fabricLabel_Len)
     );
 }
 

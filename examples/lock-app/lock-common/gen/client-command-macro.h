@@ -11071,20 +11071,20 @@
     time \
   );
 
-/** @brief Command description for UpdateLabel
+/** @brief Command description for UpdateFabricLabel
  *
- * Command: UpdateLabel
- * @param label OCTET_STRING 
+ * Command: UpdateFabricLabel
+ * @param fabricLabel OCTET_STRING 
  */
-#define emberAfFillCommandFabricClusterUpdateLabel( \
-  label \
+#define emberAfFillCommandFabricClusterUpdateFabricLabel( \
+  fabricLabel \
 ) \
   emberAfFillExternalBuffer( \
     mask, \
      \
-    ZCL_UPDATE_LABEL_COMMAND_ID, \
+    ZCL_UPDATE_FABRIC_LABEL_COMMAND_ID, \
     "u", \
-    label \
+    fabricLabel \
   );
 
 /** @brief Command description for RemoveFabric

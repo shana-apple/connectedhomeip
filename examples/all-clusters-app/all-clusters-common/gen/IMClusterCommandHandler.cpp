@@ -3999,14 +3999,14 @@ else
 }
             break;
         }
-        case ZCL_UPDATE_LABEL_COMMAND_ID: {
+        case ZCL_UPDATE_FABRIC_LABEL_COMMAND_ID: {
         // We are using TLVUnpackError and TLVError here since both of them can be CHIP_END_OF_TLV
 // When TLVError is CHIP_END_OF_TLV, it means we have iterated all of the items, which is not a real error.
 // Any error value TLVUnpackError means we have received an illegal value.
 CHIP_ERROR TLVError = CHIP_NO_ERROR;
 CHIP_ERROR TLVUnpackError = CHIP_NO_ERROR;
-chip::ByteSpan label;
-bool labelExists = false;
+chip::ByteSpan fabricLabel;
+bool fabricLabelExists = false;
 uint32_t validArgumentCount = 0;
 
 while ((TLVError = aDataTlv.Next()) == CHIP_NO_ERROR)
@@ -4014,7 +4014,7 @@ while ((TLVError = aDataTlv.Next()) == CHIP_NO_ERROR)
   switch (TLV::TagNumFromTag(aDataTlv.GetTag()))
   {
     case 0:
-      if (labelExists)
+      if (fabricLabelExists)
       {
             ChipLogProgress(Zcl, "Duplicate TLV tag %" PRIx32, TLV::TagNumFromTag(aDataTlv.GetTag()));
             TLVUnpackError = CHIP_ERROR_IM_MALFORMED_COMMAND_DATA_ELEMENT;
@@ -4023,11 +4023,11 @@ while ((TLVError = aDataTlv.Next()) == CHIP_NO_ERROR)
     {
         const uint8_t * data = nullptr;
         TLVUnpackError = aDataTlv.GetDataPtr(data);
-        label = chip::ByteSpan(data, aDataTlv.GetLength());
+        fabricLabel = chip::ByteSpan(data, aDataTlv.GetLength());
     }
       if (CHIP_NO_ERROR == TLVUnpackError)
       {
-            labelExists = true;
+            fabricLabelExists = true;
             validArgumentCount++;
       }
       break;
@@ -4057,7 +4057,7 @@ else
 if (CHIP_NO_ERROR == TLVError && CHIP_NO_ERROR == TLVUnpackError && 1 == validArgumentCount)
 {
 // TODO(#5098) We should pass the Command Object and EndpointId to the cluster callbacks.
-        emberAfFabricClusterUpdateLabelCallback(label);
+        emberAfFabricClusterUpdateFabricLabelCallback(fabricLabel);
         }
 else
 {

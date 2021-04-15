@@ -6011,7 +6011,7 @@ private:
 | Commands:                                                           |        |
 | * GetFabricId                                                       |   0x02 |
 | * RemoveFabric                                                      |   0x01 |
-| * UpdateLabel                                                       |   0x00 |
+| * UpdateFabricLabel                                                 |   0x00 |
 |------------------------------------------------------------------------------|
 | Attributes:                                                         |        |
 | * FabricsList                                                       | 0x0000 |
@@ -6085,17 +6085,17 @@ private:
 };
 
 /*
- * Command UpdateLabel
+ * Command UpdateFabricLabel
  */
-class FabricUpdateLabel: public ModelCommand
+class FabricUpdateFabricLabel: public ModelCommand
 {
 public:
-    FabricUpdateLabel(): ModelCommand("update-label")
+    FabricUpdateFabricLabel(): ModelCommand("update-fabric-label")
     {
-        AddArgument("label", &mLabel);
+        AddArgument("fabricLabel", &mFabricLabel);
         ModelCommand::AddArguments();
     }
-    ~FabricUpdateLabel()
+    ~FabricUpdateFabricLabel()
     {
       delete onSuccessCallback;
       delete onFailureCallback;
@@ -6107,13 +6107,13 @@ public:
 
         chip::Controller::FabricCluster cluster;
         cluster.Associate(device, endpointId);
-        return cluster.UpdateLabel(onSuccessCallback->Cancel(), onFailureCallback->Cancel(),  chip::ByteSpan(chip::Uint8::from_char(mLabel), strlen(mLabel)));
+        return cluster.UpdateFabricLabel(onSuccessCallback->Cancel(), onFailureCallback->Cancel(),  chip::ByteSpan(chip::Uint8::from_char(mFabricLabel), strlen(mFabricLabel)));
     }
 
 private:
     chip::Callback::Callback<DefaultSuccessCallback> * onSuccessCallback = new chip::Callback::Callback<DefaultSuccessCallback>(OnDefaultSuccessResponse, this);
     chip::Callback::Callback<DefaultFailureCallback> * onFailureCallback = new chip::Callback::Callback<DefaultFailureCallback>(OnDefaultFailureResponse, this);
-    char * mLabel;
+    char * mFabricLabel;
 };
 
 
@@ -9267,7 +9267,7 @@ void registerClusterFabric(Commands & commands)
     commands_list clusterCommands = {
         make_unique<FabricGetFabricId>(),
         make_unique<FabricRemoveFabric>(),
-        make_unique<FabricUpdateLabel>(),
+        make_unique<FabricUpdateFabricLabel>(),
         make_unique<DiscoverFabricAttributes>(),
         make_unique<ReadFabricFabricsList>(),
         make_unique<ReadFabricClusterRevision>(),

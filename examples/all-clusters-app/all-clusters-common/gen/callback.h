@@ -1819,11 +1819,11 @@ bool emberAfFabricClusterGetFabricIdCallback();
 bool emberAfFabricClusterRemoveFabricCallback(chip::FabricId fabricId, chip::NodeId nodeId, uint16_t vendorId);
 
 /**
-* @brief Fabric Cluster UpdateLabel Command callback
-* @param label
+* @brief Fabric Cluster UpdateFabricLabel Command callback
+* @param fabricLabel
 */
 
-bool emberAfFabricClusterUpdateLabelCallback(chip::ByteSpan label);
+bool emberAfFabricClusterUpdateFabricLabelCallback(chip::ByteSpan fabricLabel);
 
 /**
 * @brief General Commissioning Cluster ArmFailSafe Command callback

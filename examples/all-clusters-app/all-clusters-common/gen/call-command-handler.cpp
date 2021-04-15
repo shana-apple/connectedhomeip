@@ -1359,9 +1359,9 @@ uint16_t vendorId;
 wasHandled = emberAfFabricClusterRemoveFabricCallback(fabricId, nodeId, vendorId);
             break;
         }
-        case ZCL_UPDATE_LABEL_COMMAND_ID: {
+        case ZCL_UPDATE_FABRIC_LABEL_COMMAND_ID: {
         uint16_t payloadOffset = cmd->payloadStartIndex;
-chip::ByteSpan label;
+chip::ByteSpan fabricLabel;
 
   if (cmd->bufLen < payloadOffset + 1u)
   {
@@ -1369,10 +1369,10 @@ chip::ByteSpan label;
   }
   {
   uint8_t * rawData = emberAfGetString(cmd->buffer, payloadOffset, cmd->bufLen);
-  label = chip::ByteSpan(rawData + 1u, emberAfStringLength(rawData));
+  fabricLabel = chip::ByteSpan(rawData + 1u, emberAfStringLength(rawData));
   }
 
-wasHandled = emberAfFabricClusterUpdateLabelCallback(label);
+wasHandled = emberAfFabricClusterUpdateFabricLabelCallback(fabricLabel);
             break;
         }
         default: {

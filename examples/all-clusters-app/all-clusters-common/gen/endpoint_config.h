@@ -239,8 +239,8 @@
   { 0x0000, ZAP_TYPE(ARRAY), 254, 0, ZAP_LONG_DEFAULTS_INDEX(0) }, /* Descriptor (server): device list */  \
   { 0x0001, ZAP_TYPE(ARRAY), 254, 0, ZAP_LONG_DEFAULTS_INDEX(254) }, /* Descriptor (server): server list */  \
   { 0x0002, ZAP_TYPE(ARRAY), 254, 0, ZAP_LONG_DEFAULTS_INDEX(508) }, /* Descriptor (server): client list */  \
-  { 0xFFFD, ZAP_TYPE(INT16U), 2, 0, ZAP_SIMPLE_DEFAULT(0x0001) }, /* Descriptor (server): cluster revision */  \
   { 0x0003, ZAP_TYPE(ARRAY), 254, 0, ZAP_LONG_DEFAULTS_INDEX(762) }, /* Descriptor (server): parts list */  \
+  { 0xFFFD, ZAP_TYPE(INT16U), 2, 0, ZAP_SIMPLE_DEFAULT(0x0001) }, /* Descriptor (server): cluster revision */  \
   { 0xFFFD, ZAP_TYPE(INT16U), 2, ZAP_ATTRIBUTE_MASK(SINGLETON), ZAP_SIMPLE_DEFAULT(3) }, /* Basic (server): cluster revision */  \
   { 0x0000, ZAP_TYPE(INT16U), 2, ZAP_ATTRIBUTE_MASK(SINGLETON), ZAP_EMPTY_DEFAULT() }, /* Basic (server): InteractionModelVersion */  \
   { 0x0001, ZAP_TYPE(CHAR_STRING), 32, ZAP_ATTRIBUTE_MASK(SINGLETON), ZAP_LONG_DEFAULTS_INDEX(1016) }, /* Basic (server): VendorName */  \
@@ -331,8 +331,8 @@
   { 0x0000, ZAP_TYPE(OCTET_STRING), 32, 0, ZAP_LONG_DEFAULTS_INDEX(1538) }, /* Application Basic (server): vendor name */  \
   { 0x0001, ZAP_TYPE(INT16U), 2, 0, ZAP_EMPTY_DEFAULT() }, /* Application Basic (server): vendor id */  \
   { 0x0002, ZAP_TYPE(OCTET_STRING), 32, 0, ZAP_LONG_DEFAULTS_INDEX(1570) }, /* Application Basic (server): application name */  \
-  { 0xFFFD, ZAP_TYPE(INT16U), 2, 0, ZAP_SIMPLE_DEFAULT(0x0001) }, /* Application Basic (server): cluster revision */  \
   { 0x0003, ZAP_TYPE(INT16U), 2, 0, ZAP_EMPTY_DEFAULT() }, /* Application Basic (server): product id */  \
+  { 0xFFFD, ZAP_TYPE(INT16U), 2, 0, ZAP_SIMPLE_DEFAULT(0x0001) }, /* Application Basic (server): cluster revision */  \
   { 0x0005, ZAP_TYPE(OCTET_STRING), 32, 0, ZAP_LONG_DEFAULTS_INDEX(1602) }, /* Application Basic (server): application id */  \
   { 0x0006, ZAP_TYPE(INT16U), 2, 0, ZAP_EMPTY_DEFAULT() }, /* Application Basic (server): catalog vendor id */  \
   { 0x0007, ZAP_TYPE(ENUM8), 1, 0, ZAP_SIMPLE_DEFAULT(0x01) }, /* Application Basic (server): application satus */  \
@@ -588,7 +588,7 @@ const EmberAfGenericClusterFunction chipFuncArrayIasZoneServer[] = {\
   { 0x0508, 0x00, ZAP_COMMAND_MASK(INCOMING_SERVER) }, /* Low Power (server): Sleep */ \
   { 0xF000, 0x00, ZAP_COMMAND_MASK(INCOMING_SERVER) }, /* Binding (server): Bind */ \
   { 0xF000, 0x01, ZAP_COMMAND_MASK(INCOMING_SERVER) }, /* Binding (server): Unbind */ \
-  { 0xFC03, 0x00, ZAP_COMMAND_MASK(INCOMING_SERVER) }, /* Fabric (server): UpdateLabel */ \
+  { 0xFC03, 0x00, ZAP_COMMAND_MASK(INCOMING_SERVER) }, /* Fabric (server): UpdateFabricLabel */ \
   { 0xFC03, 0x01, ZAP_COMMAND_MASK(INCOMING_SERVER) }, /* Fabric (server): RemoveFabric */ \
   { 0xFC03, 0x02, ZAP_COMMAND_MASK(INCOMING_SERVER) }, /* Fabric (server): GetFabricId */ \
   { 0xFC03, 0x03, ZAP_COMMAND_MASK(INCOMING_CLIENT) }, /* Fabric (server): GetFabricIdResponse */ \

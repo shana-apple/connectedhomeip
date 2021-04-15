@@ -1176,7 +1176,7 @@ chip::System::PacketBufferHandle encodeDoorLockClusterReadClusterRevisionAttribu
 | Commands:                                                           |        |
 | * GetFabricId                                                       |   0x02 |
 | * RemoveFabric                                                      |   0x01 |
-| * UpdateLabel                                                       |   0x00 |
+| * UpdateFabricLabel                                                 |   0x00 |
 |------------------------------------------------------------------------------|
 | Attributes:                                                         |        |
 | * FabricsList                                                       | 0x0000 |
@@ -1197,9 +1197,9 @@ chip::System::PacketBufferHandle encodeFabricClusterRemoveFabricCommand(uint8_t 
 
 /**
  * @brief
- *    Encode an UpdateLabel command for Fabric server into buffer including the APS frame
+ *    Encode an UpdateFabricLabel command for Fabric server into buffer including the APS frame
  */
-chip::System::PacketBufferHandle encodeFabricClusterUpdateLabelCommand(uint8_t seqNum, chip::EndpointId destinationEndpoint, chip::ByteSpan label);
+chip::System::PacketBufferHandle encodeFabricClusterUpdateFabricLabelCommand(uint8_t seqNum, chip::EndpointId destinationEndpoint, chip::ByteSpan fabricLabel);
 
 /**
  * @brief

@@ -5587,7 +5587,7 @@ private:
         completionHandler([CHIPError errorForCHIPErrorCode:err], nil);
     }
 }
-- (void)updateLabel:(NSData *)label completionHandler:(ResponseHandler)completionHandler
+- (void)updateFabricLabel:(NSData *)fabricLabel completionHandler:(ResponseHandler)completionHandler
 {
     CHIPDefaultSuccessCallbackBridge * onSuccess = new CHIPDefaultSuccessCallbackBridge(completionHandler, [self callbackQueue]);
     if (!onSuccess) {
@@ -5602,7 +5602,7 @@ private:
         return;
     }
 
-    CHIP_ERROR err = self.cppCluster.UpdateLabel(onSuccess->Cancel(), onFailure->Cancel(), chip::ByteSpan((const uint8_t*)label.bytes, label.length));
+    CHIP_ERROR err = self.cppCluster.UpdateFabricLabel(onSuccess->Cancel(), onFailure->Cancel(), chip::ByteSpan((const uint8_t*)fabricLabel.bytes, fabricLabel.length));
     if (err != CHIP_NO_ERROR) {
         delete onSuccess;
         delete onFailure;

@@ -208,7 +208,7 @@ uint16_t encodeApsFrame(uint8_t * buffer, uint16_t buf_length, EmberApsFrame * a
 #define FABRIC_CLUSTER_ID 0xFC03
 #define ZCL_GET_FABRIC_ID_COMMAND_ID (0x02)
 #define ZCL_REMOVE_FABRIC_COMMAND_ID (0x01)
-#define ZCL_UPDATE_LABEL_COMMAND_ID (0x00)
+#define ZCL_UPDATE_FABRIC_LABEL_COMMAND_ID (0x00)
 
 #define GENERAL_COMMISSIONING_CLUSTER_ID 0x0030
 #define ZCL_ARM_FAIL_SAFE_COMMAND_ID (0x02)
@@ -2845,7 +2845,7 @@ PacketBufferHandle encodeDoorLockClusterReadClusterRevisionAttribute(uint8_t seq
 | Commands:                                                           |        |
 | * GetFabricId                                                       |   0x02 |
 | * RemoveFabric                                                      |   0x01 |
-| * UpdateLabel                                                       |   0x00 |
+| * UpdateFabricLabel                                                 |   0x00 |
 |------------------------------------------------------------------------------|
 | Attributes:                                                         |        |
 | * FabricsList                                                       | 0x0000 |
@@ -2887,24 +2887,24 @@ PacketBufferHandle encodeFabricClusterRemoveFabricCommand(uint8_t seqNum, Endpoi
 }
 
 /*
- * Command UpdateLabel
+ * Command UpdateFabricLabel
  */
-PacketBufferHandle encodeFabricClusterUpdateLabelCommand(uint8_t seqNum, EndpointId destinationEndpoint, chip::ByteSpan label)
+PacketBufferHandle encodeFabricClusterUpdateFabricLabelCommand(uint8_t seqNum, EndpointId destinationEndpoint, chip::ByteSpan fabricLabel)
 {
-    COMMAND_HEADER("UpdateLabel", FABRIC_CLUSTER_ID);
-    size_t labelStrLen = label.size();
-    if (!CanCastTo<uint8_t>(labelStrLen))
+    COMMAND_HEADER("UpdateFabricLabel", FABRIC_CLUSTER_ID);
+    size_t fabricLabelStrLen = fabricLabel.size();
+    if (!CanCastTo<uint8_t>(fabricLabelStrLen))
     {
-        ChipLogError(Zcl, "Error encoding %s command. String too long: %d", kName, labelStrLen);
+        ChipLogError(Zcl, "Error encoding %s command. String too long: %d", kName, fabricLabelStrLen);
         return PacketBufferHandle();
     }
 
       buf
         .Put8(kFrameControlClusterSpecificCommand)
        .Put8(seqNum)
-       .Put8(ZCL_UPDATE_LABEL_COMMAND_ID)
-       .Put(static_cast<uint8_t>(labelStrLen))
-       .Put(label.data(), label.size())
+       .Put8(ZCL_UPDATE_FABRIC_LABEL_COMMAND_ID)
+       .Put(static_cast<uint8_t>(fabricLabelStrLen))
+       .Put(fabricLabel.data(), fabricLabel.size())
     ;
     COMMAND_FOOTER();
 }

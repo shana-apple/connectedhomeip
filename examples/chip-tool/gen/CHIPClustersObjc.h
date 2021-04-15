@@ -289,7 +289,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)getFabricId:(ResponseHandler)completionHandler;
 - (void)removeFabric:(uint64_t)fabricId nodeId:(uint64_t)nodeId vendorId:(uint16_t)vendorId completionHandler:(ResponseHandler)completionHandler;
-- (void)updateLabel:(NSData *)label completionHandler:(ResponseHandler)completionHandler;
+- (void)updateFabricLabel:(NSData *)fabricLabel completionHandler:(ResponseHandler)completionHandler;
 
 - (void)readAttributeFabricsList:(ResponseHandler)completionHandler;
 - (void)readAttributeClusterRevision:(ResponseHandler)completionHandler;

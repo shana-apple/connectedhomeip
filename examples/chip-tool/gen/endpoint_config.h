@@ -284,7 +284,7 @@
   { 0x0508, 0x00, ZAP_COMMAND_MASK(INCOMING_SERVER) }, /* Low Power (client): Sleep */ \
   { 0xF000, 0x00, ZAP_COMMAND_MASK(INCOMING_SERVER) }, /* Binding (client): Bind */ \
   { 0xF000, 0x01, ZAP_COMMAND_MASK(INCOMING_SERVER) }, /* Binding (client): Unbind */ \
-  { 0xFC03, 0x00, ZAP_COMMAND_MASK(INCOMING_SERVER) }, /* Fabric (client): UpdateLabel */ \
+  { 0xFC03, 0x00, ZAP_COMMAND_MASK(INCOMING_SERVER) }, /* Fabric (client): UpdateFabricLabel */ \
   { 0xFC03, 0x01, ZAP_COMMAND_MASK(INCOMING_SERVER) }, /* Fabric (client): RemoveFabric */ \
   { 0xFC03, 0x02, ZAP_COMMAND_MASK(INCOMING_SERVER) }, /* Fabric (client): GetFabricId */ \
   { 0xFC03, 0x03, ZAP_COMMAND_MASK(INCOMING_CLIENT) }, /* Fabric (client): GetFabricIdResponse */ \

@@ -344,7 +344,7 @@ public:
     // Cluster Commands
     CHIP_ERROR GetFabricId(Callback::Cancelable * onSuccessCallback, Callback::Cancelable * onFailureCallback);
     CHIP_ERROR RemoveFabric(Callback::Cancelable * onSuccessCallback, Callback::Cancelable * onFailureCallback, chip::FabricId fabricId, chip::NodeId nodeId, uint16_t vendorId);
-    CHIP_ERROR UpdateLabel(Callback::Cancelable * onSuccessCallback, Callback::Cancelable * onFailureCallback, chip::ByteSpan label);
+    CHIP_ERROR UpdateFabricLabel(Callback::Cancelable * onSuccessCallback, Callback::Cancelable * onFailureCallback, chip::ByteSpan fabricLabel);
 
     // Cluster Attributes
     CHIP_ERROR DiscoverAttributes(Callback::Cancelable * onSuccessCallback, Callback::Cancelable * onFailureCallback);
@@ -354,7 +354,7 @@ public:
 private:
     static constexpr CommandId kGetFabricIdCommandId = 0x02;
     static constexpr CommandId kRemoveFabricCommandId = 0x01;
-    static constexpr CommandId kUpdateLabelCommandId = 0x00;
+    static constexpr CommandId kUpdateFabricLabelCommandId = 0x00;
 };
 
 class DLL_EXPORT GeneralCommissioningCluster : public ClusterBase
