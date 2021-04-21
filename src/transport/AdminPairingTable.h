@@ -70,13 +70,13 @@ public:
     NodeId GetNodeId() const { return mNodeId; }
     void SetNodeId(NodeId nodeId) { mNodeId = nodeId; }
 
-    NodeId GetFabricId() const { return mFabricId; }
+    FabricId GetFabricId() const { return mFabricId; }
     void SetFabricId(FabricId fabricId) { mFabricId = fabricId; }
 
     AdminId GetAdminId() const { return mAdmin; }
     void SetAdminId(AdminId adminId) { mAdmin = adminId; }
 
-    AdminId GetVendorId() const { return mVendorId; }
+    uint16_t GetVendorId() const { return mVendorId; }
     void SetVendorId(uint16_t vendorId) { mVendorId = vendorId; }
 
     const OperationalCredentials & GetOperationalCreds() const { return mOpCred; }

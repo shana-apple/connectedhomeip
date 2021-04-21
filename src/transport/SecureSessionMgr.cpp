@@ -439,7 +439,23 @@ void SecureSessionMgr::SecureMessageDispatch(const PacketHeader & packetHeader, 
     if (packetHeader.GetDestinationNodeId().HasValue())
     {
         admin->SetNodeId(packetHeader.GetDestinationNodeId().Value());
+        ChipLogProgress(Inet, "Setting nodeID %" PRIX64 " on admin.", admin->GetNodeId());
     }
+
+    if (packetHeader.GetSourceNodeId().HasValue())
+    {
+        admin->SetFabricId(packetHeader.GetSourceNodeId().Value());
+        ChipLogProgress(Inet, "Setting fabricID %" PRIX64 " on admin.", admin->GetFabricId());
+    }
+
+    admin->SetVendorId(payloadHeader.GetProtocolID().GetVendorId());
+    ChipLogProgress(Inet, "Setting vendorID %" PRIX16 " on admin.", admin->GetVendorId());
+
+    // if (admin != nullptr)
+    // {
+    //     VerifyOrExit(CHIP_NO_ERROR == PersistAdminPairingToKVS(admin));
+    // }
+
 
     // TODO: once mDNS address resolution is available reconsider if this is required
     // This updates the peer address once a packet is received from a new address
