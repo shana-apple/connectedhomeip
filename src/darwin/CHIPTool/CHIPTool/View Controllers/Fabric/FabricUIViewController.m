@@ -207,6 +207,12 @@
 
 - (void)fetchFabricsList
 {
+    CHIPDescriptor *descClust = [[CHIPDescriptor alloc] initWithDevice:CHIPGetPairedDevice() endpoint:0 queue:dispatch_get_main_queue()];
+    [descClust readAttributeDeviceList:^(NSError * _Nullable error, NSDictionary * _Nullable values) {
+        NSLog(@"Got back device list %@ %@", values, error);
+    }];
+    
+    
     NSLog(@"Request to fetchFabricsList");
     [self updateResult:[NSString stringWithFormat:@"readAttributeFabricsList command sent."] isError:NO];
     [self.cluster readAttributeFabricsList:^(NSError * _Nullable error, NSDictionary * _Nullable values) {

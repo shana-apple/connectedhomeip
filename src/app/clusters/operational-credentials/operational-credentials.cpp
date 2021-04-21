@@ -66,7 +66,6 @@ EmberAfStatus writeFabric(FabricId fabricId, NodeId nodeId, uint16_t vendorId, i
     EmberAfStatus status    = EMBER_ZCL_STATUS_SUCCESS;
     AttributeId attributeId = ZCL_FABRICS_ATTRIBUTE_ID;
 
-    uint16_t fabricCount = 1;
     EmberAfFabricDescriptor fabricDescriptor;
     fabricDescriptor.FabricId = fabricId;
     fabricDescriptor.NodeId   = nodeId;
@@ -76,38 +75,38 @@ EmberAfStatus writeFabric(FabricId fabricId, NodeId nodeId, uint16_t vendorId, i
     // fabricDescriptor.Label = chip::ByteSpan(charPointer + 1u, emberAfStringLength(charPointer));
 
 
-    status = writeFabricAttribute(0, attributeId, (uint8_t *) &fabricDescriptor, index);
-    VerifyOrReturnError(status == EMBER_ZCL_STATUS_SUCCESS, status);
-    return writeFabricAttribute(0, attributeId, (uint8_t *) &fabricCount);
+    return  writeFabricAttribute(0, attributeId, (uint8_t *) &fabricDescriptor, index);
+    // VerifyOrReturnError(status == EMBER_ZCL_STATUS_SUCCESS, status);
+    // return writeFabricAttribute(0, attributeId, (uint8_t *) &fabricCount);
 }
 
 CHIP_ERROR writeAdminsIntoFabricsListAttribute(void)
 {
-    ChipLogProgress(Discovery, "Call to writeAdminsIntoFabricsListAttribute");
-    auto pairing = GetGlobalAdminPairingTable().cbegin();
-    int32_t fabricIndex = 0;
-    while (pairing != GetGlobalAdminPairingTable().cend())
-    { 
-        NodeId nodeId = pairing->GetNodeId();
-        uint64_t fabricId = pairing->GetFabricId();
-        uint16_t vendorId = pairing->GetVendorId();
-        if (nodeId != kUndefinedNodeId && fabricId != kUndefinedFabricId)
-        {
-            ChipLogProgress(Discovery, "Found admin paring for fabric %" PRIX64 ", node %" PRIX64, fabricId,
-                        nodeId);
-            if (writeFabric(fabricId, nodeId, vendorId, fabricIndex) != EMBER_ZCL_STATUS_SUCCESS)
-            {
-                ChipLogError(Discovery, "Failed to write admin with fabricId %" PRIX64 " in fabrics list", fabricId);
-            }
-            fabricIndex ++;
-        }
-        pairing++;
-    }
-    ChipLogProgress(Discovery, "Storing %" PRIX32 " admins in fabrics list attribute.", fabricIndex);
-    if (writeFabricAttribute(0, ZCL_FABRICS_ATTRIBUTE_ID, (uint8_t *) &fabricIndex) != EMBER_ZCL_STATUS_SUCCESS)
-    {
-        ChipLogError(Discovery, "Failed to write admin count %" PRIX32 " in fabrics list", fabricIndex);
-    }
+    // ChipLogProgress(Discovery, "Call to writeAdminsIntoFabricsListAttribute");
+    // auto pairing = GetGlobalAdminPairingTable().cbegin();
+    // int32_t fabricIndex = 0;
+    // while (pairing != GetGlobalAdminPairingTable().cend())
+    // { 
+    //     NodeId nodeId = pairing->GetNodeId();
+    //     uint64_t fabricId = pairing->GetFabricId();
+    //     uint16_t vendorId = pairing->GetVendorId();
+    //     if (nodeId != kUndefinedNodeId && fabricId != kUndefinedFabricId)
+    //     {
+    //         ChipLogProgress(Discovery, "Found admin paring for fabric %" PRIX64 ", node %" PRIX64, fabricId,
+    //                     nodeId);
+    //         if (writeFabric(fabricId, nodeId, vendorId, fabricIndex) != EMBER_ZCL_STATUS_SUCCESS)
+    //         {
+    //             ChipLogError(Discovery, "Failed to write admin with fabricId %" PRIX64 " in fabrics list", fabricId);
+    //         }
+    //         fabricIndex ++;
+    //     }
+    //     pairing++;
+    // }
+    // ChipLogProgress(Discovery, "Storing %" PRIX32 " admins in fabrics list attribute.", fabricIndex);
+    // if (writeFabricAttribute(0, ZCL_FABRICS_ATTRIBUTE_ID, (uint8_t *) &fabricIndex) != EMBER_ZCL_STATUS_SUCCESS)
+    // {
+    //     ChipLogError(Discovery, "Failed to write admin count %" PRIX32 " in fabrics list", fabricIndex);
+    // }
     return CHIP_NO_ERROR;
 }
 
@@ -151,7 +150,11 @@ bool emberAfOperationalCredentialsClusterGetFabricIdCallback()
     {
         emberAfDoorLockClusterPrintln("Fabric: failed to send %s response: 0x%x", "get_fabric_id", sendStatus);
     }
-    // writeFabric(fabricID, 12345, 5, 0);
+
+    writeFabric(fabricID, 12345, 5, 0);
+    writeFabric(fabricID, 12345, 5, 1);
+    uint16_t fabricCount  = 2;
+    writeFabricAttribute(0, ZCL_FABRICS_ATTRIBUTE_ID, (uint8_t *) &fabricCount);
     return true;
 }
 

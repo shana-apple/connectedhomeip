@@ -177,6 +177,10 @@ uint16_t emberAfCopyList(ClusterId clusterId, EmberAfAttributeMetadata * am, boo
                            &entryOffset, sizeof(entry->VendorId)); // INT16U
             copyListMember(write ? dest : (uint8_t *) &entry->GroupKeyIndex, write ? (uint8_t *) &entry->GroupKeyIndex : src, write,
                            &entryOffset, sizeof(entry->GroupKeyIndex)); // INT16U
+            if (src == NULL)
+            {
+                dest[0] = 0; // Zero out the length of string
+            }
             copyListMember(write ? dest : (uint8_t *) &entry->GroupKeyRoot, write ? (uint8_t *) &entry->GroupKeyRoot : src, write,
                            &entryOffset, 16); // OCTET_STRING
             copyListMember(write ? dest : (uint8_t *) &entry->GroupKeyEpochStartTime,
@@ -200,20 +204,28 @@ uint16_t emberAfCopyList(ClusterId clusterId, EmberAfAttributeMetadata * am, boo
             entryLength = 50;
             if (((index - 1) * entryLength) > (am->size - entryLength))
             {
-                ChipLogError(Zcl, "Index %l is invalid.", index);
+                ChipLogProgress(Zcl, "Index %l is invalid.", index);
                 return 0;
             }
+            ChipLogProgress(Zcl, "Writing fabric for index %l.", index);
+            ChipLogProgress(Zcl, "Starting offset before math is %" PRIX16 ".", entryOffset);
             entryOffset = static_cast<uint16_t>(entryOffset + ((index - 1) * entryLength));
+            ChipLogProgress(Zcl, "Starting offset after math is %" PRIX16 ".", entryOffset);
             // Struct _FabricDescriptor
             _FabricDescriptor * entry = reinterpret_cast<_FabricDescriptor *>(write ? src : dest);
             copyListMember(write ? dest : (uint8_t *) &entry->FabricId, write ? (uint8_t *) &entry->FabricId : src, write,
                            &entryOffset, sizeof(entry->FabricId)); // FABRIC_ID
+            ChipLogProgress(Zcl, "Entry offset after fabricId is %" PRIX16 ".", entryOffset);
             copyListMember(write ? dest : (uint8_t *) &entry->VendorId, write ? (uint8_t *) &entry->VendorId : src, write,
                            &entryOffset, sizeof(entry->VendorId)); // INT16U
-            copyListMember(write ? dest : (uint8_t *) &entry->Label, write ? (uint8_t *) &entry->Label : src, write, &entryOffset,
-                           32); // OCTET_STRING
+            ChipLogProgress(Zcl, "Entry offset after vendorid is %" PRIX16 ".", entryOffset);
+            // copyListMember(write ? dest : (uint8_t *) &entry->Label, write ? (uint8_t *) &entry->Label : src, write, &entryOffset,
+            //                32); // OCTET_STRING
+            entryOffset = static_cast<uint16_t>(entryOffset + 32);
+            ChipLogProgress(Zcl, "Entry offset after octet string is %" PRIX16 ".", entryOffset);
             copyListMember(write ? dest : (uint8_t *) &entry->NodeId, write ? (uint8_t *) &entry->NodeId : src, write, &entryOffset,
                            sizeof(entry->NodeId)); // NODE_ID
+            ChipLogProgress(Zcl, "Entry offset after nodeid is %" PRIX16 ".", entryOffset);
             break;
         }
         }
