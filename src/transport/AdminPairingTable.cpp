@@ -27,8 +27,16 @@
 namespace chip {
 namespace Transport {
 
-CHIP_ERROR AdminPairingInfo::StoreIntoKVS(PersistentStorageDelegate & kvs)
+PersistentStorageDelegate * gStorage = nullptr;
+
+CHIP_ERROR AdminPairingInfo::StoreIntoKVS()
 {
+    if (gStorage == nullptr)
+    {
+        ChipLogError(Discovery, "Server storage delegate is nill, cannot store admin in KVS");
+        return CHIP_ERROR_INVALID_ARGUMENT;
+    }
+
     char key[KeySize()];
     ReturnErrorOnFailure(GenerateKey(mAdmin, key, sizeof(key)));
 
@@ -38,18 +46,23 @@ CHIP_ERROR AdminPairingInfo::StoreIntoKVS(PersistentStorageDelegate & kvs)
     info.mFabricId = Encoding::LittleEndian::HostSwap64(mFabricId);
     info.mVendorId = Encoding::LittleEndian::HostSwap16(mVendorId);
 
-    return kvs.SyncSetKeyValue(key, &info, sizeof(info));
+    return gStorage->SyncSetKeyValue(key, &info, sizeof(info));
 }
 
-CHIP_ERROR AdminPairingInfo::FetchFromKVS(PersistentStorageDelegate & kvs)
+CHIP_ERROR AdminPairingInfo::FetchFromKVS()
 {
+    if (gStorage == nullptr)
+    {
+        ChipLogError(Discovery, "Server storage delegate is nill, cannot fetch from KVS");
+        return CHIP_ERROR_INVALID_ARGUMENT;
+    }
     char key[KeySize()];
     ReturnErrorOnFailure(GenerateKey(mAdmin, key, sizeof(key)));
 
     StorableAdminPairingInfo info;
 
     uint16_t size = sizeof(info);
-    ReturnErrorOnFailure(kvs.SyncGetKeyValue(key, &info, size));
+    ReturnErrorOnFailure(gStorage->SyncGetKeyValue(key, &info, size));
 
     mNodeId    = Encoding::LittleEndian::HostSwap64(info.mNodeId);
     AdminId id = Encoding::LittleEndian::HostSwap16(info.mAdmin);
@@ -60,12 +73,18 @@ CHIP_ERROR AdminPairingInfo::FetchFromKVS(PersistentStorageDelegate & kvs)
     return CHIP_NO_ERROR;
 }
 
-CHIP_ERROR AdminPairingInfo::DeleteFromKVS(PersistentStorageDelegate & kvs, AdminId id)
+CHIP_ERROR AdminPairingInfo::DeleteFromKVS(AdminId id)
 {
+    if (gStorage == nullptr)
+    {
+        ChipLogError(Discovery, "Server storage delegate is nill, cannot delete from KVS");
+        return CHIP_ERROR_INVALID_ARGUMENT;
+    }
+
     char key[KeySize()];
     ReturnErrorOnFailure(GenerateKey(id, key, sizeof(key)));
 
-    kvs.AsyncDeleteKeyValue(key);
+    gStorage->AsyncDeleteKeyValue(key);
     return CHIP_NO_ERROR;
 }
 
@@ -151,6 +170,14 @@ void AdminPairingTable::Reset()
     {
         mStates[i].Reset();
     }
+}
+
+CHIP_ERROR AdminPairingTable::Init(PersistentStorageDelegate * storage)
+{
+    VerifyOrReturnError(storage != nullptr, CHIP_ERROR_INVALID_ARGUMENT);
+    gStorage  = storage;
+    ChipLogProgress(Discovery, "Init admin pairing table with server storage.");
+    return CHIP_NO_ERROR;
 }
 
 } // namespace Transport

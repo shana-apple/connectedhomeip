@@ -38,6 +38,7 @@
 #include <transport/AdminPairingTable.h>
 #include <transport/SecureMessageCodec.h>
 #include <transport/TransportMgr.h>
+#include <transport/AdminPairingTable.h>
 
 #include <inttypes.h>
 
@@ -383,6 +384,11 @@ void SecureSessionMgr::SecureMessageDispatch(const PacketHeader & packetHeader, 
 
     Transport::AdminPairingInfo * admin = nullptr;
 
+    uint8_t modifiedAdmin = 0;
+    NodeId nodeId;
+    uint64_t fabricId;
+    uint16_t newVendorId;
+
     VerifyOrExit(!msg.IsNull(), ChipLogError(Inet, "Secure transport received NULL packet, discarding"));
 
     if (state == nullptr)
@@ -438,24 +444,42 @@ void SecureSessionMgr::SecureMessageDispatch(const PacketHeader & packetHeader, 
 
     if (packetHeader.GetDestinationNodeId().HasValue())
     {
-        admin->SetNodeId(packetHeader.GetDestinationNodeId().Value());
-        ChipLogProgress(Inet, "Setting nodeID %" PRIX64 " on admin.", admin->GetNodeId());
+        nodeId = packetHeader.GetDestinationNodeId().Value();
+        if (nodeId != kUndefinedNodeId && admin->GetNodeId() != nodeId)
+        {
+            admin->SetNodeId(nodeId);
+            ChipLogProgress(Inet, "Setting nodeID %" PRIX64 " on admin.", admin->GetNodeId());
+            modifiedAdmin = 1;
+        }
+        
     }
 
     if (packetHeader.GetSourceNodeId().HasValue())
     {
-        admin->SetFabricId(packetHeader.GetSourceNodeId().Value());
-        ChipLogProgress(Inet, "Setting fabricID %" PRIX64 " on admin.", admin->GetFabricId());
+        fabricId = packetHeader.GetSourceNodeId().Value();
+        if (fabricId != kUndefinedFabricId && admin->GetFabricId() != fabricId)
+        {
+            admin->SetFabricId(packetHeader.GetSourceNodeId().Value());
+            ChipLogProgress(Inet, "Setting fabricID %" PRIX64 " on admin.", admin->GetFabricId());
+            modifiedAdmin = 1;
+        }
     }
 
-    admin->SetVendorId(payloadHeader.GetProtocolID().GetVendorId());
-    ChipLogProgress(Inet, "Setting vendorID %" PRIX16 " on admin.", admin->GetVendorId());
+    newVendorId = payloadHeader.GetProtocolID().GetVendorId();
+    if (newVendorId != Transport::kUndefinedVendorId && newVendorId != admin->GetVendorId())
+    {
+        admin->SetVendorId(newVendorId);
+        ChipLogProgress(Inet, "Setting vendorID %" PRIX16 " on admin.", admin->GetVendorId());
+        modifiedAdmin = 1;
 
-    // if (admin != nullptr)
-    // {
-    //     VerifyOrExit(CHIP_NO_ERROR == PersistAdminPairingToKVS(admin));
-    // }
+    }
 
+    if (modifiedAdmin == 1)
+    {
+        ChipLogProgress(Inet, "Since admin was modified, persisting changes to KVS");
+        admin->StoreIntoKVS();
+        modifiedAdmin = 1;
+    }
 
     // TODO: once mDNS address resolution is available reconsider if this is required
     // This updates the peer address once a packet is received from a new address

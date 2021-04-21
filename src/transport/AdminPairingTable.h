@@ -32,7 +32,7 @@ typedef uint16_t AdminId;
 typedef uint64_t FabricId;
 
 static constexpr AdminId kUndefinedAdminId   = UINT16_MAX;
-static constexpr FabricId kUndefinedFabricId = UINT64_MAX;
+// static constexpr FabricId kUndefinedFabricId = UINT64_MAX;
 static constexpr uint16_t kUndefinedVendorId = UINT16_MAX;
 // KVS store is sensitive to length of key strings, based on the underlying
 // platform. Keeping them short.
@@ -100,11 +100,11 @@ public:
         mVendorId = kUndefinedVendorId;
     }
 
-    CHIP_ERROR StoreIntoKVS(PersistentStorageDelegate & kvs);
+    CHIP_ERROR StoreIntoKVS();
 
-    CHIP_ERROR FetchFromKVS(PersistentStorageDelegate & kvs);
+    CHIP_ERROR FetchFromKVS();
 
-    static CHIP_ERROR DeleteFromKVS(PersistentStorageDelegate & kvs, AdminId id);
+    static CHIP_ERROR DeleteFromKVS(AdminId id);
 
 private:
     AdminId mAdmin     = kUndefinedAdminId;
@@ -210,6 +210,8 @@ public:
     AdminPairingInfo * FindAdmin(FabricId fabricId);
 
     void Reset();
+
+    CHIP_ERROR Init(PersistentStorageDelegate * storage);
 
     ConstAdminIterator cbegin() const { return ConstAdminIterator(mStates, 0, CHIP_CONFIG_MAX_DEVICE_ADMINS); }
     ConstAdminIterator cend() const
