@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		1E1F24982636F84000FA0EA9 /* CHIPClusters.h in Headers */ = {isa = PBXBuildFile; fileRef = 1E1F24962636F84000FA0EA9 /* CHIPClusters.h */; };
 		1E1F24992636F84000FA0EA9 /* CHIPClusters.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1E1F24972636F84000FA0EA9 /* CHIPClusters.cpp */; };
+		1E6ACD6B26498441004C185A /* attribute-list-helper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1E6ACD6A26498441004C185A /* attribute-list-helper.cpp */; };
 		1E9BD1C72621AFF100FC3246 /* attribute-size.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1E9BD1C62621AFF100FC3246 /* attribute-size.cpp */; };
 		1EB41B7B263C4CC60048E4C1 /* CHIPClustersTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EB41B7A263C4CC60048E4C1 /* CHIPClustersTests.m */; };
 		1EC4CE3A25CC263E00D7304F /* reporting.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1EC4CE3825CC263E00D7304F /* reporting.cpp */; };
@@ -77,6 +78,7 @@
 /* Begin PBXFileReference section */
 		1E1F24962636F84000FA0EA9 /* CHIPClusters.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CHIPClusters.h; path = gen/CHIPClusters.h; sourceTree = "<group>"; };
 		1E1F24972636F84000FA0EA9 /* CHIPClusters.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CHIPClusters.cpp; path = gen/CHIPClusters.cpp; sourceTree = "<group>"; };
+		1E6ACD6A26498441004C185A /* attribute-list-helper.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = "attribute-list-helper.cpp"; path = "../../../app/util/attribute-list-helper.cpp"; sourceTree = "<group>"; };
 		1E9BD1C62621AFF100FC3246 /* attribute-size.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = "attribute-size.cpp"; path = "gen/attribute-size.cpp"; sourceTree = "<group>"; };
 		1EB41B7A263C4CC60048E4C1 /* CHIPClustersTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CHIPClustersTests.m; sourceTree = "<group>"; };
 		1EC4CE3825CC263E00D7304F /* reporting.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = reporting.cpp; path = ../../../app/reporting/reporting.cpp; sourceTree = "<group>"; };
@@ -160,6 +162,7 @@
 		1EC4CE3525CC259700D7304F /* CHIPApp */ = {
 			isa = PBXGroup;
 			children = (
+				1E6ACD6A26498441004C185A /* attribute-list-helper.cpp */,
 				1EC4CE6125CC271B00D7304F /* af-event.cpp */,
 				1EC4CE4925CC267700D7304F /* af-main-common.cpp */,
 				1EC4CE4125CC267600D7304F /* attribute-size.cpp */,
@@ -444,6 +447,7 @@
 				1EC4CE5E25CC26E900D7304F /* call-command-handler.cpp in Sources */,
 				1EC4CE3B25CC263E00D7304F /* reporting-default-configuration.cpp in Sources */,
 				2C1B027A2641DB4E00780EF1 /* CHIPOperationalCredentialsDelegate.mm in Sources */,
+				1E6ACD6B26498441004C185A /* attribute-list-helper.cpp in Sources */,
 				1EC4CE4F25CC267700D7304F /* process-cluster-message.cpp in Sources */,
 				1EC4CE3D25CC265200D7304F /* DataModelHandler.cpp in Sources */,
 				1EC4CE5725CC267700D7304F /* attribute-storage.cpp in Sources */,
