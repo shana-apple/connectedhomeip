@@ -31,6 +31,17 @@
 
 using namespace ::chip;
 
+constexpr uint16_t kByteSpanInListLengthSize = 2;
+
+namespace {
+uint16_t GetByteSpanSize(uint8_t * src)
+{
+    uint16_t size = *src & 0xFF;
+    size += (*(src + 1) << 8);
+    return size;
+}
+} // namespace
+
 #define CHECK_MESSAGE_LENGTH(value)                                                                                                \
     if (!chip::CanCastTo<uint16_t>(value))                                                                                         \
     {                                                                                                                              \
@@ -458,9 +469,9 @@ bool emberAfReadAttributesResponseCallback(ClusterId clusterId, uint8_t * messag
                             data[i].GroupKeyIndex = emberAfGetInt16u(message, 0, messageLen);
                             message += 2;
                             CHECK_MESSAGE_LENGTH(2);
-                            data[i].GroupKeyRoot = chip::ByteSpan(message, 16);
-                            message += 16;
-                            CHECK_MESSAGE_LENGTH(16);
+                            data[i].GroupKeyRoot = chip::ByteSpan(message + kByteSpanInListLengthSize, GetByteSpanSize(message));
+                            message += 18;
+                            CHECK_MESSAGE_LENGTH(18);
                             data[i].GroupKeyEpochStartTime = emberAfGetInt64u(message, 0, messageLen);
                             message += 8;
                             CHECK_MESSAGE_LENGTH(8);
