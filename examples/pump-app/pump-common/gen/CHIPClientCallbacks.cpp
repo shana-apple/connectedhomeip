@@ -31,6 +31,17 @@
 
 using namespace ::chip;
 
+constexpr uint16_t kByteSpanInListLengthSize = 2;
+
+namespace {
+uint16_t GetByteSpanSize(uint8_t * src)
+{
+    uint16_t size = *src & 0xFF;
+    size += (*(src + 1) << 8);
+    return size;
+}
+} // namespace
+
 #define CHECK_MESSAGE_LENGTH(value)                                                                                                \
     if (!chip::CanCastTo<uint16_t>(value))                                                                                         \
     {                                                                                                                              \
