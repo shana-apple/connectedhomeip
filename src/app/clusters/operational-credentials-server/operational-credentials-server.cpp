@@ -29,6 +29,7 @@
 #include <support/CodeUtils.h>
 #include <support/logging/CHIPLogging.h>
 #include <transport/AdminPairingTable.h>
+#include <lib/core/CHIPSafeCasts.h>
 
 #include "gen/af-structs.h"
 #include "gen/attribute-id.h"
@@ -85,6 +86,11 @@ EmberAfStatus writeFabric(FabricId fabricId, NodeId nodeId, uint16_t vendorId, i
     fabricDescriptor.FabricId = fabricId;
     fabricDescriptor.NodeId   = nodeId;
     fabricDescriptor.VendorId = vendorId;
+    // char * data = strdup("TestLabel");
+    // chip::ByteSpan span = chip::ByteSpan(reinterpret_cast<uint8_t *>(data), strlen(data));
+    // fabricDescriptor.Label = span;
+    char dataLabel[] = "exampleCSign";
+    fabricDescriptor.Label = ByteSpan(Uint8::from_char(dataLabel), sizeof(dataLabel));
 
     emberAfPrintln(EMBER_AF_PRINT_DEBUG,
                    "OpCreds: Writing admin into attribute store at index %d: fabricId %" PRIX64 ", nodeId %" PRIX64
