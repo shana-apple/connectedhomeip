@@ -112,6 +112,8 @@ CHIP_ERROR writeAdminsIntoFabricsListAttribute()
         NodeId nodeId     = pairing.GetNodeId();
         uint64_t fabricId = pairing.GetFabricId();
         uint16_t vendorId = pairing.GetVendorId();
+        // uint8_t *fabricLabel = pairing.GetFabricLabel();
+        emberAfPrintln(EMBER_AF_PRINT_DEBUG, "OpCreds: ShanaLog would have written %c", pairing.GetFabricLabel());
 
         // Skip over uninitialized admins
         if (nodeId == kUndefinedNodeId || fabricId == kUndefinedFabricId || vendorId == kUndefinedVendorId)
@@ -273,9 +275,22 @@ exit:
 
 bool emberAfOperationalCredentialsClusterUpdateFabricLabelCallback(chip::app::Command * commandObj, uint8_t * Label)
 {
-    emberAfPrintln(EMBER_AF_PRINT_DEBUG, "OpCreds: UpdateFabricLabel");
+    emberAfPrintln(EMBER_AF_PRINT_DEBUG, "OpCreds: UpdateFabricLabel %c", Label);
 
-    EmberAfStatus status = EMBER_ZCL_STATUS_FAILURE;
+    EmberAfStatus status   = EMBER_ZCL_STATUS_SUCCESS;
+    CHIP_ERROR err;
+    // char* labelToSave;
+
+    // Fetch current admin
+    AdminPairingInfo * admin = retrieveCurrentAdmin();
+    VerifyOrExit(admin != nullptr, status = EMBER_ZCL_STATUS_FAILURE);
+
+    // Store Label
+    admin->SetFabricLabel(Label);
+    emberAfPrintln(EMBER_AF_PRINT_DEBUG, "OpCreds: ShanaLog %c post save", admin->GetFabricLabel());
+
+exit:
+    writeAdminsIntoFabricsListAttribute();
     emberAfSendImmediateDefaultResponse(status);
     return true;
 }

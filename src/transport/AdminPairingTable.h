@@ -65,6 +65,9 @@ class DLL_EXPORT AdminPairingInfo
 public:
     AdminPairingInfo() { Reset(); }
 
+    uint8_t * GetFabricLabel() const { return mFabricLabel; }
+    void SetFabricLabel(uint8_t * fabricLabel) { mFabricLabel = fabricLabel; }
+
     NodeId GetNodeId() const { return mNodeId; }
     void SetNodeId(NodeId nodeId) { mNodeId = nodeId; }
 
@@ -96,6 +99,7 @@ public:
         mAdmin    = kUndefinedAdminId;
         mFabricId = kUndefinedFabricId;
         mVendorId = kUndefinedVendorId;
+        mFabricLabel = nullptr;
     }
 
     friend class AdminPairingTable;
@@ -105,6 +109,7 @@ private:
     NodeId mNodeId     = kUndefinedNodeId;
     FabricId mFabricId = kUndefinedFabricId;
     uint16_t mVendorId = kUndefinedVendorId;
+    uint8_t * mFabricLabel = nullptr;
 
     OperationalCredentials mOpCred;
     AccessControlList mACL;
@@ -123,6 +128,7 @@ private:
         uint64_t mNodeId;   /* This field is serialized in LittleEndian byte order */
         uint64_t mFabricId; /* This field is serialized in LittleEndian byte order */
         uint16_t mVendorId; /* This field is serialized in LittleEndian byte order */
+        uint8_t mFabricLabel; 
     };
 };
 
