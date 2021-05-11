@@ -25,6 +25,7 @@
 #include <core/CHIPPersistentStorageDelegate.h>
 #include <support/DLLUtil.h>
 #include <transport/raw/MessageHeader.h>
+#include <lib/core/CHIPSafeCasts.h>
 
 namespace chip {
 namespace Transport {
@@ -65,8 +66,8 @@ class DLL_EXPORT AdminPairingInfo
 public:
     AdminPairingInfo() { Reset(); }
 
-    uint8_t * GetFabricLabel() const { return mFabricLabel; }
-    void SetFabricLabel(uint8_t * fabricLabel) { mFabricLabel = fabricLabel; }
+    const uint8_t * GetFabricLabel() const { return Uint8::from_const_char(mFabricLabel); };
+    void SetFabricLabel(uint8_t * fabricLabel);
 
     NodeId GetNodeId() const { return mNodeId; }
     void SetNodeId(NodeId nodeId) { mNodeId = nodeId; }
@@ -99,7 +100,7 @@ public:
         mAdmin    = kUndefinedAdminId;
         mFabricId = kUndefinedFabricId;
         mVendorId = kUndefinedVendorId;
-        mFabricLabel = nullptr;
+        mFabricLabel[0] = '\0';
     }
 
     friend class AdminPairingTable;
@@ -109,7 +110,7 @@ private:
     NodeId mNodeId     = kUndefinedNodeId;
     FabricId mFabricId = kUndefinedFabricId;
     uint16_t mVendorId = kUndefinedVendorId;
-    uint8_t * mFabricLabel = nullptr;
+    char mFabricLabel[32];
 
     OperationalCredentials mOpCred;
     AccessControlList mACL;
@@ -128,7 +129,7 @@ private:
         uint64_t mNodeId;   /* This field is serialized in LittleEndian byte order */
         uint64_t mFabricId; /* This field is serialized in LittleEndian byte order */
         uint16_t mVendorId; /* This field is serialized in LittleEndian byte order */
-        uint8_t mFabricLabel; 
+        char mFabricLabel[32]; 
     };
 };
 

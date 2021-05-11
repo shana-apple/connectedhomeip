@@ -78,7 +78,7 @@ EmberAfStatus writeFabricAttribute(uint8_t * buffer, int32_t index = -1)
                                     index + 1);
 }
 
-EmberAfStatus writeFabric(FabricId fabricId, NodeId nodeId, uint16_t vendorId, int32_t index)
+EmberAfStatus writeFabric(FabricId fabricId, NodeId nodeId, uint16_t vendorId, uint8_t * fabricLabel, int32_t index)
 {
     EmberAfStatus status = EMBER_ZCL_STATUS_SUCCESS;
 
@@ -89,8 +89,12 @@ EmberAfStatus writeFabric(FabricId fabricId, NodeId nodeId, uint16_t vendorId, i
     // char * data = strdup("TestLabel");
     // chip::ByteSpan span = chip::ByteSpan(reinterpret_cast<uint8_t *>(data), strlen(data));
     // fabricDescriptor.Label = span;
-    char dataLabel[] = "exampleCSign";
-    fabricDescriptor.Label = ByteSpan(Uint8::from_char(dataLabel), sizeof(dataLabel));
+    // char dataLabel[] = "exampleCSign";
+    if (fabricLabel != nullptr) 
+    {
+        fabricDescriptor.Label = ByteSpan(fabricLabel + 1u, emberAfStringLength(fabricLabel));
+    }
+    
 
     emberAfPrintln(EMBER_AF_PRINT_DEBUG,
                    "OpCreds: Writing admin into attribute store at index %d: fabricId %" PRIX64 ", nodeId %" PRIX64
@@ -112,8 +116,7 @@ CHIP_ERROR writeAdminsIntoFabricsListAttribute()
         NodeId nodeId     = pairing.GetNodeId();
         uint64_t fabricId = pairing.GetFabricId();
         uint16_t vendorId = pairing.GetVendorId();
-        // uint8_t *fabricLabel = pairing.GetFabricLabel();
-        emberAfPrintln(EMBER_AF_PRINT_DEBUG, "OpCreds: ShanaLog would have written %c", pairing.GetFabricLabel());
+        const uint8_t * fabricLabel = pairing.GetFabricLabel();
 
         // Skip over uninitialized admins
         if (nodeId == kUndefinedNodeId || fabricId == kUndefinedFabricId || vendorId == kUndefinedVendorId)
@@ -124,7 +127,7 @@ CHIP_ERROR writeAdminsIntoFabricsListAttribute()
                            fabricId, nodeId, vendorId);
             continue;
         }
-        else if (writeFabric(fabricId, nodeId, vendorId, fabricIndex) != EMBER_ZCL_STATUS_SUCCESS)
+        else if (writeFabric(fabricId, nodeId, vendorId, fabricLabel, fabricIndex) != EMBER_ZCL_STATUS_SUCCESS)
         {
             emberAfPrintln(EMBER_AF_PRINT_DEBUG, "OpCreds: Failed to write admin with fabricId %" PRIX64 " in fabrics list",
                            fabricId);
@@ -275,11 +278,10 @@ exit:
 
 bool emberAfOperationalCredentialsClusterUpdateFabricLabelCallback(chip::app::Command * commandObj, uint8_t * Label)
 {
-    emberAfPrintln(EMBER_AF_PRINT_DEBUG, "OpCreds: UpdateFabricLabel %c", Label);
+    emberAfPrintln(EMBER_AF_PRINT_DEBUG, "OpCreds: UpdateFabricLabel");
 
     EmberAfStatus status   = EMBER_ZCL_STATUS_SUCCESS;
     CHIP_ERROR err;
-    // char* labelToSave;
 
     // Fetch current admin
     AdminPairingInfo * admin = retrieveCurrentAdmin();
@@ -287,7 +289,8 @@ bool emberAfOperationalCredentialsClusterUpdateFabricLabelCallback(chip::app::Co
 
     // Store Label
     admin->SetFabricLabel(Label);
-    emberAfPrintln(EMBER_AF_PRINT_DEBUG, "OpCreds: ShanaLog %c post save", admin->GetFabricLabel());
+    err = GetGlobalAdminPairingTable().Store(admin->GetAdminId());
+    VerifyOrExit(err == CHIP_NO_ERROR, status = EMBER_ZCL_STATUS_FAILURE);
 
 exit:
     writeAdminsIntoFabricsListAttribute();

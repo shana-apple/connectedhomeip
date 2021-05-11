@@ -28,6 +28,20 @@ namespace chip {
 
 namespace Transport {
 
+// uint8_t * AdminPairingInfo::GetFabricLabel()
+// {
+//     return mFabricLabel;
+// }
+
+void AdminPairingInfo::SetFabricLabel(uint8_t * fabricLabel)
+{
+    char *fabricLabelChar = Uint8::to_char(fabricLabel);
+    if (strlen(fabricLabelChar) < 32)
+    {
+        memmove(mFabricLabel, fabricLabelChar , strlen(fabricLabelChar) + 1);
+    }
+}
+
 CHIP_ERROR AdminPairingInfo::StoreIntoKVS(PersistentStorageDelegate * kvs)
 {
     CHIP_ERROR err = CHIP_NO_ERROR;
@@ -40,6 +54,11 @@ CHIP_ERROR AdminPairingInfo::StoreIntoKVS(PersistentStorageDelegate * kvs)
     info.mAdmin    = Encoding::LittleEndian::HostSwap16(mAdmin);
     info.mFabricId = Encoding::LittleEndian::HostSwap64(mFabricId);
     info.mVendorId = Encoding::LittleEndian::HostSwap16(mVendorId);
+    if (strlen(mFabricLabel) < 32)
+    {
+        memmove(info.mFabricLabel, mFabricLabel , strlen(mFabricLabel) + 1);
+    }
+    
 
     err = kvs->SyncSetKeyValue(key, &info, sizeof(info));
     if (err != CHIP_NO_ERROR)
@@ -64,6 +83,10 @@ CHIP_ERROR AdminPairingInfo::FetchFromKVS(PersistentStorageDelegate * kvs)
     AdminId id = Encoding::LittleEndian::HostSwap16(info.mAdmin);
     mFabricId  = Encoding::LittleEndian::HostSwap64(info.mFabricId);
     mVendorId  = Encoding::LittleEndian::HostSwap16(info.mVendorId);
+    if (strlen(info.mFabricLabel) < 32)
+    {
+        memmove(mFabricLabel, info.mFabricLabel, strlen(info.mFabricLabel) + 1);
+    }
     ReturnErrorCodeIf(mAdmin != id, CHIP_ERROR_INCORRECT_STATE);
 
     return CHIP_NO_ERROR;
