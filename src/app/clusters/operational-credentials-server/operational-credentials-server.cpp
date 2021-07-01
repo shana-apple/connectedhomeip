@@ -145,8 +145,8 @@ CHIP_ERROR writeAdminsIntoFabricsListAttribute()
     }
 
     // Store the count of fabrics we just stored
-    emberAfPrintln(EMBER_AF_PRINT_DEBUG, "OpCreds: Stored %" PRIu32 " admins in fabrics list attribute.", fabricIndex);
-    if (writeFabricAttribute((uint8_t *) &fabricIndex) != EMBER_ZCL_STATUS_SUCCESS)
+    emberAfPrintln(EMBER_AF_PRINT_DEBUG, "OpCreds: Stored %" PRIu8 " admins in fabrics list attribute.", fabricIndex);
+    if (writeFabricAttribute(&fabricIndex) != EMBER_ZCL_STATUS_SUCCESS)
     {
         emberAfPrintln(EMBER_AF_PRINT_DEBUG, "OpCreds: Failed to write admin count %" PRIu8 " in fabrics list", fabricIndex);
         err = CHIP_ERROR_PERSISTED_STORAGE_FAILED;
